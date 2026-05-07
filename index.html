@@ -21,11 +21,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            /* justify-content: center; を外して少し上寄りに配置し、スクロールしやすくしました */
+            padding: 40px 0;
             min-height: 100vh;
             margin: 0;
+            box-sizing: border-box;
             color: var(--text-color);
-            touch-action: none;
+            /* bodyの touch-action: none; を削除し、画面全体のスクロールを許可 */
         }
 
         h1 { margin-bottom: 5px; }
@@ -60,6 +62,7 @@
             background-color: #d7ccc8;
             border: 4px solid #5d4037;
             overflow: hidden;
+            /* 盤面の中だけはスクロールを防止（スワイプ操作のため） */
             touch-action: none;
         }
 
@@ -125,7 +128,6 @@
 
         button:hover { background-color: #5d4037; }
 
-        /* クリア時のオーバーレイ */
         .overlay {
             display: none;
             position: fixed;
@@ -141,7 +143,6 @@
         .overlay h2 { font-size: 3rem; margin-bottom: 20px; }
         .result-text { font-size: 1.5rem; line-height: 1.8; margin-bottom: 30px; }
 
-        /* 紙吹雪のスタイル */
         #confetti-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -167,11 +168,10 @@
 </head>
 <body>
 
-    <!-- 紙吹雪が降るコンテナ -->
     <div id="confetti-container"></div>
 
     <h1>箱入り娘</h1>
-    <p>動かしたい方向へスワイプ（ドラッグ）してください</p>
+    <p>盤面の外側を触るとスクロールできます</p>
 
     <div class="status-bar">
         <div id="moveDisplay">手数: 0</div>
@@ -218,7 +218,6 @@
         let timerInterval = null;
         let isGameStarted = false;
 
-        // イベントリスナーを確実に登録してボタンを機能させる
         document.getElementById('resetBtnMain').addEventListener('click', initGame);
         document.getElementById('resetBtnOverlay').addEventListener('click', initGame);
 
@@ -249,7 +248,6 @@
         function shootConfetti() {
             const container = document.getElementById('confetti-container');
             container.innerHTML = '';
-            // 鮮やかな色を用意
             const colors = ['#ef5350', '#ffca28', '#9ccc65', '#4fc3f7', '#ab47bc', '#ff7043'];
             
             for (let i = 0; i < 100; i++) {
@@ -258,7 +256,6 @@
                 conf.style.left = Math.random() * 100 + 'vw';
                 conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 
-                // 大きさと落ちるスピードをランダムに
                 const scale = Math.random() * 0.6 + 0.4;
                 conf.style.width = (10 * scale) + 'px';
                 conf.style.height = (20 * scale) + 'px';
@@ -270,18 +267,16 @@
         }
 
         function initGame() {
-            // 全ての状態をリセット
             stopTimer();
             isGameStarted = false;
             startTime = null;
             moves = 0;
             pieces = JSON.parse(JSON.stringify(initialPieces));
             
-            // 画面の表示をリセット
             document.getElementById('timerDisplay').innerText = `時間: 00:00`;
             updateMoveDisplay();
             document.getElementById('winOverlay').style.display = 'none';
-            document.getElementById('confetti-container').innerHTML = ''; // 紙吹雪を掃除
+            document.getElementById('confetti-container').innerHTML = ''; 
             
             render();
         }
@@ -370,17 +365,15 @@
                 stopTimer();
                 const finalTime = document.getElementById('timerDisplay').innerText.replace('時間: ', '');
                 
-                // 紙吹雪を飛ばす
                 shootConfetti();
                 
                 setTimeout(() => {
                     document.getElementById('resultDisplayText').innerHTML = `クリアタイム： <b>${finalTime}</b><br>手数： <b>${moves} 手</b>`;
                     document.getElementById('winOverlay').style.display = 'flex';
-                }, 600); // 紙吹雪を少し見せてから結果画面を出す
+                }, 600);
             }
         }
 
-        // ゲーム起動時の初期化
         initGame();
     </script>
 </body>
