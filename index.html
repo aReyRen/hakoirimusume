@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>箱入り娘 パズル（演出付きタイムアタック版）</title>
+    <title>箱入り娘 パズル</title>
     <style>
         :root {
             --bg-color: #f7f3e9;
@@ -21,17 +21,22 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* justify-content: center; を外して少し上寄りに配置し、スクロールしやすくしました */
-            padding: 40px 0;
-            min-height: 100vh;
+            /* 確実にスクロールできるように、下に大きな余白（150px）を作りました */
+            padding: 30px 0 150px 0;
             margin: 0;
-            box-sizing: border-box;
             color: var(--text-color);
-            /* bodyの touch-action: none; を削除し、画面全体のスクロールを許可 */
+            /* ここには touch-action: none; を絶対に入れない（スクロール許可） */
         }
 
         h1 { margin-bottom: 5px; }
-        p { margin-top: 0; font-size: 0.95rem; margin-bottom: 15px; }
+        .subtitle { 
+            margin-top: 0; 
+            font-size: 0.95rem; 
+            margin-bottom: 15px; 
+            color: #d32f2f; /* 反映されたか分かりやすいように赤色にしています */
+            font-weight: bold;
+        }
+        .desc { font-size: 0.9rem; margin-bottom: 15px; text-align: center; }
 
         .status-bar {
             display: flex;
@@ -62,7 +67,7 @@
             background-color: #d7ccc8;
             border: 4px solid #5d4037;
             overflow: hidden;
-            /* 盤面の中だけはスクロールを防止（スワイプ操作のため） */
+            /* 盤面の中を触っている時だけはスクロールせず、コマの移動に集中させます */
             touch-action: none;
         }
 
@@ -171,7 +176,8 @@
     <div id="confetti-container"></div>
 
     <h1>箱入り娘</h1>
-    <p>盤面の外側を触るとスクロールできます</p>
+    <p class="subtitle">★スクロール対応・更新版★</p>
+    <p class="desc">盤面の外側（背景）を触って上下にスクロールできます</p>
 
     <div class="status-bar">
         <div id="moveDisplay">手数: 0</div>
